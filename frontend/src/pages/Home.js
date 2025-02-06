@@ -5,37 +5,36 @@ import RecipeForm from "../components/RecipeForm";
 import { useRecipesContext } from "../hooks/useRecipesContext";
 
 const Home = () => {
-    const { recipes, dispatch } = useRecipesContext()
-    const [ recipeToEdit, setRecipeToEdit] = useState(null);
+    const { recipes, dispatch } = useRecipesContext();
+    const [recipeToEdit, setRecipeToEdit] = useState(null);
     const [searchQuery, setSearchQuery] = useState("");
 
-    const {user} = useAuthContext()
+    const { user } = useAuthContext();
 
     useEffect(() => {
-        const fetechRecipes = async () => {
-            const response = await fetch(`${process.env.REACT_APP_API_URL}/api/recipes`,{
-                headers:{
-                    'Authorization':`Bearer ${user.token}`
+        const fetchRecipes = async () => {
+            const response = await fetch(`${process.env.REACT_APP_API_URL}/api/recipes`, {
+                headers: {
+                    'Authorization': `Bearer ${user.token}`
                 }
-            })
-            const json = await response.json()
-            console.log(json)
+            });
+            const json = await response.json();
 
             if (response.ok) {
-                dispatch({ type: 'SET_RECIPES', payload: json })
+                dispatch({ type: 'SET_RECIPES', payload: json });
             }
-        }
+        };
         if (user) {
-            fetechRecipes()
-          }
-    }, [dispatch,user])
+            fetchRecipes();
+        }
+    }, [dispatch, user]);
 
-    // const filteredRecipes = recipes
-    //     ? recipes.filter((recipe) =>
-    //         recipe.title.toLowerCase().includes(searchQuery.toLowerCase())
-    //     )
-    //     : [];
-
+    // Filter recipes based on search query
+    const filteredRecipes = recipes
+        ? recipes.filter((recipe) =>
+            recipe.name.toLowerCase().includes(searchQuery.toLowerCase())
+        )
+        : [];
 
     return (
         <div>
@@ -50,18 +49,22 @@ const Home = () => {
 
             <div className="home">
                 <div className="workouts">
-                    {recipes &&recipes.map((recipe) => (
-                        <RecipeDetails
-                            key={recipe._id}
-                            recipe={recipe}
-                            setRecipeToEdit={setRecipeToEdit}
-                        />
-                    ))}
+                    {filteredRecipes.length > 0 ? (
+                        filteredRecipes.map((recipe) => (
+                            <RecipeDetails
+                                key={recipe._id}
+                                recipe={recipe}
+                                setRecipeToEdit={setRecipeToEdit}
+                            />
+                        ))
+                    ) : (
+                        <p>No recipes found</p>
+                    )}
                 </div>
                 <RecipeForm recipeToEdit={recipeToEdit} setRecipeToEdit={setRecipeToEdit} />
             </div>
         </div>
-    )
-}
+    );
+};
 
 export default Home;
