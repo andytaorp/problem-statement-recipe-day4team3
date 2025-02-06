@@ -78,7 +78,7 @@ const RecipeForm=({ recipeToEdit, setRecipeToEdit })=>{
 
             <label>Ingredients:</label>
             <input
-                type="number"
+                type="text"
                 onChange={(e) => setIngredient(e.target.value)}
                 value={ingredient}
                 className={emptyFields.includes('ingredient') ? 'error' : ''}
@@ -86,14 +86,14 @@ const RecipeForm=({ recipeToEdit, setRecipeToEdit })=>{
 
             <label>Instruction:</label>
             <input
-                type="number"
+                type="text"
                 onChange={(e) => setInstruction(e.target.value)}
                 value={instruction}
                 className={emptyFields.includes('instruction') ? 'error' : ''}
             />
             <label>Time:</label>
             <input
-                type="number"
+                type="text"
                 onChange={(e) => setTime(e.target.value)}
                 value={time}
                 className={emptyFields.includes('time') ? 'error' : ''}
