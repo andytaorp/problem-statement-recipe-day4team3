@@ -25,7 +25,7 @@ const RecipeDetails=({recipe,setRecipeToEdit})=>{
 
     return(
         <div className="workout-details">
-            <h4>{recipe.title}</h4>
+            <h4>{recipe.name}</h4>
             <p><strong>Ingredients : </strong>{recipe.ingredients}</p>
             <p><strong>Cooking instructions : </strong>{recipe.instructions}</p>
             <p>Preparation takes {recipe.time}</p>

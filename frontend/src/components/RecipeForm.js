@@ -6,20 +6,20 @@ const RecipeForm=({ recipeToEdit, setRecipeToEdit })=>{
     const{dispatch}=useRecipesContext()
     const { user } = useAuthContext()
 
-    const [title,setTitle]=useState('')
-    const [ingredient,setIngredient]=useState('')
-    const [instruction,setInstruction]=useState('')
-    const [time,setTime]=useState('')
+    const [name,setName]=useState('')
+    const [ingredients,setIngredients]=useState('')
+    const [instructions,setInstructions]=useState('')
+    const [prepTime,setPrepTime]=useState('')
     const [difficulty,setDifficulty]=useState('')
     const [error,setError]=useState(null)
     const [emptyFields,setEmptyFields]=useState([])
 
     useEffect(() => {
         if (recipeToEdit) {
-            setTitle(recipeToEdit.title);
-            setIngredient(recipeToEdit.ingredient);
-            setInstruction(recipeToEdit.instruction);
-            setTime(recipeToEdit.time);
+            setName(recipeToEdit.name);
+            setIngredients(recipeToEdit.ingredients);
+            setInstructions(recipeToEdit.instructions);
+            setPrepTime(recipeToEdit.prepTime);
             setDifficulty(recipeToEdit.difficulty);
         }
     }, [recipeToEdit]);
@@ -32,7 +32,7 @@ const RecipeForm=({ recipeToEdit, setRecipeToEdit })=>{
             return
         }
 
-        const recipe={title,ingredient,instruction,time,difficulty}
+        const recipe={name,ingredients,instructions,prepTime,difficulty}
 
         const response = await fetch (recipeToEdit ? `${process.env.REACT_APP_API_URL}/api/recipes/${recipeToEdit._id}` : `${process.env.REACT_APP_API_URL}/api/recipes`,{
             method: recipeToEdit ? 'PATCH' : 'POST',
@@ -43,16 +43,17 @@ const RecipeForm=({ recipeToEdit, setRecipeToEdit })=>{
             }
         })
         const json= await response.json()
+        console.log(json)
 
         if(!response.ok){
             setError(json.error)
             setEmptyFields(json.emptyFields)
         }
         if(response.ok){
-            setTitle('')
-            setIngredient('')
-            setInstruction('')
-            setTime('')
+            setName('')
+            setIngredients('')
+            setInstructions('')
+            setPrepTime('')
             setDifficulty('')
             setError(null)
             setEmptyFields([])
@@ -68,41 +69,41 @@ const RecipeForm=({ recipeToEdit, setRecipeToEdit })=>{
          <form className="create" onSubmit={handleSubmit}>
             <h3>{recipeToEdit ? 'Edit Recipe' : 'Add a New Recipe'}</h3>
 
-            <label>Recipe Title: </label>
+            <label>Recipe Name: </label>
             <input
                 type="text"
-                onChange={(e) => setTitle(e.target.value)}
-                value={title}
-                className={emptyFields.includes('title') ? 'error' : ''}
+                onChange={(e) => setName(e.target.value)}
+                value={name}
+                className={emptyFields.includes('name') ? 'error' : ''}
             />
 
-            <label>Ingredients:</label>
+            <label>Ingredientss:</label>
             <input
-                type="number"
-                onChange={(e) => setIngredient(e.target.value)}
-                value={ingredient}
-                className={emptyFields.includes('ingredient') ? 'error' : ''}
+                type="text"
+                onChange={(e) => setIngredients(e.target.value)}
+                value={ingredients}
+                className={emptyFields.includes('ingredients') ? 'error' : ''}
             />
 
-            <label>Instruction:</label>
+            <label>Instructions:</label>
             <input
-                type="number"
-                onChange={(e) => setInstruction(e.target.value)}
-                value={instruction}
-                className={emptyFields.includes('instruction') ? 'error' : ''}
+                type="text"
+                onChange={(e) => setInstructions(e.target.value)}
+                value={instructions}
+                className={emptyFields.includes('instructions') ? 'error' : ''}
             />
             <label>Time:</label>
             <input
                 type="number"
-                onChange={(e) => setTime(e.target.value)}
-                value={time}
-                className={emptyFields.includes('time') ? 'error' : ''}
+                onChange={(e) => setPrepTime(e.target.value)}
+                value={prepTime}
+                className={emptyFields.includes('prepTime') ? 'error' : ''}
             />
             <label>Difficulty Level:</label>
             <select className={emptyFields.includes('diffculty') ? 'error' : ''}>
-                <option value={difficulty} onChange={(e) => setDifficulty(e.target.value)}>Easy</option>
-                <option value={difficulty} onChange={(e) => setDifficulty(e.target.value)}>Medium</option>
-                <option value={difficulty} onChange={(e) => setDifficulty(e.target.value)}>Hard</option>
+                <option value="easy" onChange={(e) => setDifficulty(e.target.value)}>Easy</option>
+                <option value="medium" onChange={(e) => setDifficulty(e.target.value)}>Medium</option>
+                <option value="hard" onChange={(e) => setDifficulty(e.target.value)}>Hard</option>
             </select><br></br>
             <button>{recipeToEdit ? 'Update Recipe' : 'Add Recipe'}</button>
             {error && <div className="error">{error}</div>}

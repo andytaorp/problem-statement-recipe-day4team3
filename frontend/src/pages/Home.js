@@ -19,6 +19,7 @@ const Home = () => {
                 }
             })
             const json = await response.json()
+            console.log(json)
 
             if (response.ok) {
                 dispatch({ type: 'SET_RECIPES', payload: json })
@@ -29,11 +30,11 @@ const Home = () => {
           }
     }, [dispatch,user])
 
-    const filteredRecipes = recipes
-        ? recipes.filter((recipe) =>
-            recipe.title.toLowerCase().includes(searchQuery.toLowerCase())
-        )
-        : [];
+    // const filteredRecipes = recipes
+    //     ? recipes.filter((recipe) =>
+    //         recipe.title.toLowerCase().includes(searchQuery.toLowerCase())
+    //     )
+    //     : [];
 
 
     return (
@@ -49,10 +50,10 @@ const Home = () => {
 
             <div className="home">
                 <div className="workouts">
-                    {filteredRecipes.map((recipe) => (
+                    {recipes &&recipes.map((recipe) => (
                         <RecipeDetails
                             key={recipe._id}
-                            workout={recipe}
+                            recipe={recipe}
                             setRecipeToEdit={setRecipeToEdit}
                         />
                     ))}
