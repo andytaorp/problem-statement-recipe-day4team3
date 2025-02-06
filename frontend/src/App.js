@@ -22,4 +22,4 @@ const App = () => {
       </Router>
     </AuthProvider>
   );
-
+};
