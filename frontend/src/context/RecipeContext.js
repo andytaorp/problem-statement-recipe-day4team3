@@ -14,7 +14,7 @@ export const workoutsReducer = (state, action) => {
         };
       case 'UPDATE_Recipe':
         return {
-          recipes: state.recipes.map((workout) =>
+          recipes: state.recipes.map((recipe) =>
                 recipe._id === action.payload._id ? action.payload : recipe
                 ),
         };
