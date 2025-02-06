@@ -19,7 +19,7 @@ const RecipeDetails=({recipe,setRecipeToEdit})=>{
         const json= await response.json()
 
         if(response.ok){
-            dispatch({type:'DELETE_WORKOUT',payload: json})
+            dispatch({type:'DELETE_RECIPE',payload: json})
         }
     }
 
@@ -28,8 +28,8 @@ const RecipeDetails=({recipe,setRecipeToEdit})=>{
             <h4>{recipe.name}</h4>
             <p><strong>Ingredients : </strong>{recipe.ingredients}</p>
             <p><strong>Cooking instructions : </strong>{recipe.instructions}</p>
-            <p>Preparation takes {recipe.time}</p>
-            <p>Difficulty level: {recipe.difficulty}</p>
+            <p>Preparation takes <strong>{recipe.prepTime}</strong> min</p>
+            <p><strong>Difficulty level:</strong> {recipe.difficulty}</p>
             <p>{formatDistanceToNow(new Date(recipe.createdAt), { addSuffix: true })}</p>
             <span className="material-symbols-outlined" onClick={handleClick}>delete</span>
             <p className="edit"  onClick={() => setRecipeToEdit(recipe)}>edit</p>
