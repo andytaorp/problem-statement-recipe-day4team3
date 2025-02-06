@@ -1,4 +1,3 @@
-// server.js - Main Backend Entry
 const express = require("express");
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
@@ -13,18 +12,17 @@ app.use(express.json());
 app.use(cors());
 
 // Routes
-app.use("/api/auth", authRoutes);
+app.use("/api/user", authRoutes); // Changed from "/api/auth"
 app.use("/api/recipes", recipeRoutes);
 
 const PORT = process.env.PORT || 4000;
 mongoose
-  .connect(process.env.MONGO_URI)
+  .connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => {
-    // Listen for requests
     app.listen(PORT, () => {
-      console.log("Connected to DB & listening on port", PORT);
+      console.log(`✅ Connected to DB & listening on port ${PORT}`);
     });
   })
   .catch((err) => {
-    console.log(err);
+    console.error("❌ MongoDB Connection Error:", err.message);
   });
