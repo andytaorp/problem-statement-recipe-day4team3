@@ -1,37 +1,61 @@
-import { createContext, useReducer, useEffect } from 'react'
+import React, { createContext, useState, useEffect } from "react";
+import axios from "axios";
 
-export const AuthContext = createContext()
+const AuthContext = createContext();
 
-export const authReducer = (state, action) => {
-  switch (action.type) {
-    case 'LOGIN':
-      return { user: action.payload }
-    case 'LOGOUT':
-      return { user: null }
-    default:
-      return state
-  }
-}
-
-export const AuthContextProvider = ({ children }) => {
-  const [state, dispatch] = useReducer(authReducer, { 
-    user: null
-  })
+export const AuthProvider = ({ children }) => {
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const user = JSON.parse(localStorage.getItem('user'))
-
-    if (user) {
-      dispatch({ type: 'LOGIN', payload: user }) 
+    const token = localStorage.getItem("token");
+    if (token) {
+      axios
+        .get("https://your-backend-url/api/auth/user", {
+          headers: { Authorization: `Bearer ${token}` },
+        })
+        .then((res) => setUser(res.data))
+        .catch(() => localStorage.removeItem("token"));
     }
-  }, [])
-  
-  console.log('AuthContext state:', state)
-  
-  return (
-    <AuthContext.Provider value={{ ...state, dispatch }}>
-      { children }
-    </AuthContext.Provider>
-  )
+    setLoading(false);
+  }, []);
 
-}
+  const login = async (email, password) => {
+    try {
+      const res = await axios.post("https://your-backend-url/api/auth/login", {
+        email,
+        password,
+      });
+      localStorage.setItem("token", res.data.token);
+      setUser(res.data.user);
+      return res.data;
+    } catch (error) {
+      throw error.response.data;
+    }
+  };
+
+  const register = async (email, password) => {
+    try {
+      const res = await axios.post("https://your-backend-url/api/auth/register", {
+        email,
+        password,
+      });
+      return res.data;
+    } catch (error) {
+      throw error.response.data;
+    }
+  };
+
+  const logout = () => {
+    localStorage.removeItem("token");
+    setUser(null);
+  };
+
+  return (
+    <AuthContext.Provider value={{ user, login, register, logout, loading }}>
+      {children}
+    </AuthContext.Provider>
+  );
+};
+
+export default AuthContext;
