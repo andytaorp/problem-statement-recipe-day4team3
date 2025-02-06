@@ -24,13 +24,13 @@ const RecipeForm=({ recipeToEdit, setRecipeToEdit })=>{
         }
     }, [recipeToEdit]);
 
-    const handleSubmit= async (e)=> {
-        e.preventDefault()
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-        if (!user) {
-            setError('You must be logged in')
-            return
-        }
+    if (!user) {
+      setError("You must be logged in");
+      return;
+    }
 
         const recipe={name,ingredients,instructions,prepTime,difficulty}
 
@@ -60,14 +60,15 @@ const RecipeForm=({ recipeToEdit, setRecipeToEdit })=>{
             console.log(recipeToEdit ? 'Recipe updated' : 'New recipe added', json);
             dispatch({ type: recipeToEdit ? "UPDATE_RECIPE" : "CREATE_RECIPE", payload: json });
 
-            if (recipeToEdit) {
-                setRecipeToEdit(null);
-            }
-        }
+      if (recipeToEdit) {
+        setRecipeToEdit(null);
+      }
     }
-    return(
-         <form className="create" onSubmit={handleSubmit}>
-            <h3>{recipeToEdit ? 'Edit Recipe' : 'Add a New Recipe'}</h3>
+  };
+
+  return (
+    <form className="create" onSubmit={handleSubmit}>
+      <h3>{recipeToEdit ? "Edit Recipe" : "Add a New Recipe"}</h3>
 
             <label>Recipe Name: </label>
             <input
