@@ -103,7 +103,7 @@ const RecipeForm=({ recipeToEdit, setRecipeToEdit })=>{
                 <option value={difficulty} onChange={(e) => setDifficulty(e.target.value)}>Easy</option>
                 <option value={difficulty} onChange={(e) => setDifficulty(e.target.value)}>Medium</option>
                 <option value={difficulty} onChange={(e) => setDifficulty(e.target.value)}>Hard</option>
-            </select>
+            </select><br></br>
             <button>{recipeToEdit ? 'Update Recipe' : 'Add Recipe'}</button>
             {error && <div className="error">{error}</div>}
         </form>
