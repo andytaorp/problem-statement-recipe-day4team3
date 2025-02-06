@@ -1,41 +1,38 @@
-import { useState } from "react"
-import { useSignup } from "../hooks/useSignup"
+import { useState } from 'react'
+import { useSignup } from '../hooks/useSignup'
 
-const Signup = () =>{
-    const [email,setEmail]=useState('')
-    const [password,setPassword]=useState('')
-    const {signup, error, isLoading} = useSignup()
+const Signup = () => {
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const { signup, error, isLoading } = useSignup()
 
-    const handelSubmit= async (e) =>{
-        e.preventDefault()
+  const handleSubmit = async (e) => { // Fixed function name
+    e.preventDefault()
+    await signup(email, password)
+  }
 
-        await signup(email, password)
-    }
+  return (
+    <form className="signup" onSubmit={handleSubmit}> {/* Fixed function name */}
+      <h3>Sign Up</h3>
 
-    return(
-        <form className="signup" onSubmit={handelSubmit}>
-            <h3>Sign Up</h3>
+      <label>Email:</label>
+      <input
+        type="text"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+      />
+      
+      <label>Password:</label>
+      <input
+        type="password"
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+      />
 
-            <label>Email:</label>
-            <input 
-                type="text"
-                value={email}
-                onChange={(e)=> setEmail(e.target.value)}
-            />
-            <label>Password:</label>
-            <input 
-                type="password"
-                value={password}
-                onChange={(e)=> setPassword(e.target.value)}
-            />
-
-            <button disabled={isLoading}>
-                Sign Up
-            </button>
-            {error && <div className="error">{error}</div>}
-        </form>
-    )
-
+      <button disabled={isLoading}>Sign Up</button>
+      {error && <div className="error">{error}</div>}
+    </form>
+  )
 }
 
 export default Signup
