@@ -16,7 +16,7 @@ const Ai = () => {
 
         setLoading(true);
         try {
-            
+            // Step 1: Send image for segmentation
             const segmentationResponse = await fetch(
                 'https://api.logmeal.com/v2/image/segmentation/complete',
                 { method: 'POST', body: formData, headers }
@@ -26,7 +26,7 @@ const Ai = () => {
 
             if (!segmentationData.imageId) throw new Error('Segmentation failed');
 
-           
+            // Step 2: Get nutritional information
             const nutritionResponse = await fetch(
                 'https://api.logmeal.com/v2/recipe/nutritionalInfo',
                 {
@@ -47,15 +47,15 @@ const Ai = () => {
         }
     };
 
-   
+    // Define correct key mapping
     const keyNutrients = {
-        ENERC_KCAL: { label: "Calories", unit: "kcal" },
-        CHOCDF: { label: "Carbohydrates", unit: "g" },
-        PROCNT: { label: "Protein", unit: "g" },
-        FAT: { label: "Total Fat", unit: "g" },
-        FASAT: { label: "Saturated Fat", unit: "g" },
-        SUGAR: { label: "Sugar", unit: "g" },
-        NA: { label: "Sodium", unit: "mg" }
+        ENERC_KCAL: "Energy",
+        CHOCDF: "Carbs",
+        PROCNT: "Protein",
+        FAT: "Fat",
+        FASAT: "Saturated fats",
+        SUGAR: "Sugars",
+        NA: "Sodium"
     };
 
     return (
@@ -77,20 +77,27 @@ const Ai = () => {
                     <h4>Nutritional Information</h4>
                     {result.error ? (
                         <p className="error">{result.error}</p>
-                    ) : (
+                    ) : result.nutritional_info ? (
                         <>
-                            <p><strong>Total Calories:</strong> {result.nutritional_info?.calories.toFixed(2)} kcal</p>
+                            <p><strong>Total Calories:</strong> {result.nutritional_info?.calories?.toFixed(2)} kcal</p>
+
                             <ul>
-                                {Object.entries(keyNutrients).map(([key, { label, unit }]) => {
-                                    const nutrient = result.nutritional_info?.totalNutrients?.[key];
-                                    return nutrient ? (
+                                {Object.entries(keyNutrients).map(([key, label]) => {
+                                    const nutrients = result.nutritional_info?.totalNutrients;
+                                    const nutrientValue = nutrients?.[key]?.quantity;
+
+                                    return nutrientValue !== undefined ? (
                                         <li key={key}>
-                                            <strong>{label}:</strong> {nutrient.value.toFixed(2)} {unit}
+                                            <strong>{label}:</strong> {nutrientValue.toFixed(2)} {nutrients[key].unit}
                                         </li>
-                                    ) : null;
+                                    ) : (
+                                        <li key={key}><strong>{label}:</strong> N/A</li>
+                                    );
                                 })}
                             </ul>
                         </>
+                    ) : (
+                        <p className="error">No nutritional data available.</p>
                     )}
                 </div>
             )}
@@ -99,4 +106,3 @@ const Ai = () => {
 };
 
 export default Ai;
-
