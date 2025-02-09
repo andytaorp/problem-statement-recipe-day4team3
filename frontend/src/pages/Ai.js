@@ -9,7 +9,7 @@ const Ai = () => {
         e.preventDefault();
         if (!file) return alert('Please select an image first.');
 
-        const apiUserToken = '94f20ec2c4fa16e4ed3d4d27a18851d7ab09b019';
+        const apiUserToken = '0fc08e8109c53def41faa6c676530904e79a4bad';
         const headers = { 'Authorization': `Bearer ${apiUserToken}` };
         const formData = new FormData();
         formData.append('image', file);
