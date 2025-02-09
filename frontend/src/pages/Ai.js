@@ -16,7 +16,6 @@ const Ai = () => {
 
         setLoading(true);
         try {
-            // Step 1: Send image for segmentation
             const segmentationResponse = await fetch(
                 'https://api.logmeal.com/v2/image/segmentation/complete',
                 { method: 'POST', body: formData, headers }
@@ -26,7 +25,6 @@ const Ai = () => {
 
             if (!segmentationData.imageId) throw new Error('Segmentation failed');
 
-            // Step 2: Get nutritional information
             const nutritionResponse = await fetch(
                 'https://api.logmeal.com/v2/recipe/nutritionalInfo',
                 {
@@ -47,7 +45,6 @@ const Ai = () => {
         }
     };
 
-    // Define correct key mapping
     const keyNutrients = {
         ENERC_KCAL: "Energy",
         CHOCDF: "Carbs",
